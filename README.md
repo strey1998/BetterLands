@@ -1,6 +1,6 @@
 # BetterLands.py
 
-Python script which takes in an XMage deck and spits out an XMage deck with your preferred printings of cards.
+Python script which takes in an XMage deck and spits out an XMage deck with your preferred printings of cards. Contrary to the title, it works with all cards, not just lands.
 
 ### Usage
 
