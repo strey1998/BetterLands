@@ -10,6 +10,6 @@ Run ```python3 BetterLands.py -i <input deck> -o <output deck>```. If ```<output
 
 Run ```python3 BetterLands.py --resetconfig``` to (re)generate the default config. This WILL overwrite any custom settings. Be careful.
 
-If you run ```python3 BetterLands.py -a <input deck>```, it will not do anything to the deck, but it will take all of the cards in it and add (or overwrite) those preferences.
+If you run ```python3 BetterLands.py -a <input deck>```, it will not do anything to the deck, but it will take all of the cards in it and add (or overwrite) those preferences. This will not affect any preferences for cards that do not appear in the input file, nor will it affect basic land preferences.
 
 You can also manually add entries to the config file. The formatting is quite straightforward. Card names are not case sensitive.
