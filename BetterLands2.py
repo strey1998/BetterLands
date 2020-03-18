@@ -5,6 +5,7 @@ import configparser as cp
 infile = None
 outfile = None
 resetConf = False
+addToConfMode = False
 
 class DeckEntry:
     def __init__(self, name, set, number, quantity=1, sideboard=False):
@@ -23,7 +24,7 @@ def help():
     sys.exit(2)
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:],'hi:o:',['help','resetconfig','input=','output='])
+    opts, args = getopt.getopt(sys.argv[1:],'hi:o:a:',['help','addtoconfig=','resetconfig','input=','output='])
 except getopt.GetoptError:
     print('Error: ', end='')
     help()
@@ -34,6 +35,9 @@ for opt, arg in opts:
         infile = arg
     elif opt in ('-o','--output'):
         outfile = arg
+    elif opt in ('-a','--addtoconfig'):
+        addToConfMode = True
+        infile = arg
     elif opt in ('--resetconfig'):
         resetConf = True
 
@@ -60,7 +64,7 @@ config = cp.ConfigParser()
 config.read('BetterLands.cfg')
 
 if outfile is None:
-    outfile = infile.split('.')[0] + 'BL.dck'
+    outfile = infile.split('.')[0] + '-BL.dck'
 
 deck = []
 with open(infile, 'r') as inputFile:
@@ -84,6 +88,14 @@ with open(infile, 'r') as inputFile:
             card_sideboard = False
         deck.append(DeckEntry(card_name, card_set, card_number, card_qty, card_sideboard))
 
+if addToConfMode:
+    for card in deck:
+        if not card.name in config['Preferred Basic Lands']:
+            config['Other Preferences'][card.name] = f'{card.set}:{card.number}'
+    with open('BetterLands.cfg', 'w') as configFile:
+        config.write(configFile)
+
+else:
     for card in deck:
         if card.name in config['Preferred Basic Lands']:
             card.set = config['Preferred Basic Lands'][card.name][0:3]
@@ -92,9 +104,9 @@ with open(infile, 'r') as inputFile:
             card.set = config['Other Preferences'][card.name][0:3]
             card.number = config['Other Preferences'][card.name][4:]
 
-with open(outfile, 'w') as outputFile:
-    for card in deck:
-        outputFile.write(card.getXMageDeckEntryString(end='\n'))
+    with open(outfile, 'w') as outputFile:
+        for card in deck:
+            outputFile.write(card.getXMageDeckEntryString(end='\n'))
 
 
 
